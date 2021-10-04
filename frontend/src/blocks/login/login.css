@@ -1,0 +1,17 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 266px);
+}
+
+@media screen and (max-width: 950px) {
+  .login {
+    min-height: calc(100vh - 210px);
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .login {
+    min-height: calc(100vh - 170px);
+  }
+}
