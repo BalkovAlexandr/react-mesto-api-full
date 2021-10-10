@@ -1,17 +1,18 @@
-export const BASE_URL = 'https://auth.nomoreparties.co.'
+import { BASE_URL } from './utils'
 
-function getResponseData(res) {
-  if (!res.ok) {
-    return Promise.reject(`Ошибка: ${res.status}`)
-  }
-  return res.json()
-}
+// function getResponseData(res) {
+//   if (!res.ok) {
+//     return Promise.reject(`Ошибка: ${res.status}`)
+//   }
+//   return res.json()
+// }
 
 export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
+    credentials: 'include',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -19,15 +20,19 @@ export const register = (password, email) => {
       email,
     }),
   }).then(res => {
-    return getResponseData(res)
+    if (res.ok) {
+      return res.json;
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
   })
 }
 
 export const login = (password, email) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
+    credentials: 'include',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -35,19 +40,26 @@ export const login = (password, email) => {
       email,
     }),
   }).then(res => {
-    return getResponseData(res)
+    if (res.ok) {
+      return res.json;
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
   })
 }
 
-export const checkToken = token => {
-  return fetch(`${BASE_URL}/users/me`, {
+export const logout = (token) => {
+  return fetch(`${BASE_URL}/logout`, {
     method: 'GET',
+    credentials: 'include',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'Authorization': token,
     },
   }).then(res => {
-    return getResponseData(res)
+    if (res.ok) {
+      return res.json;
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
   })
 }

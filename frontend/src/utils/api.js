@@ -1,3 +1,5 @@
+import { BASE_URL } from './utils'
+
 class Api {
   constructor({ url, headers }) {
     this._url = url
@@ -16,6 +18,7 @@ class Api {
       headers: {
         authorization: this._token,
       },
+      credentials: 'include',
     }).then(res => {
       return this._getResponseData(res)
     })
@@ -28,6 +31,7 @@ class Api {
         authorization: this._token,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         name: name,
         about: about,
@@ -41,9 +45,10 @@ class Api {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
-        authorization: this._token,
+        headers: this._token,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         avatar: src,
       }),
@@ -57,6 +62,7 @@ class Api {
       headers: {
         authorization: this._token,
       },
+      credentials: 'include',
     }).then(res => {
       return this._getResponseData(res)
     })
@@ -69,6 +75,7 @@ class Api {
         authorization: this._token,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         name: name,
         link: link,
@@ -84,6 +91,7 @@ class Api {
       headers: {
         authorization: this._token,
       },
+      credentials: 'include',
     }).then(res => {
       return this._getResponseData(res)
     })
@@ -95,6 +103,7 @@ class Api {
       headers: {
         authorization: this._token,
       },
+      credentials: 'include',
     }).then(res => {
       return this._getResponseData(res)
     })
@@ -102,9 +111,8 @@ class Api {
 }
 
 const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-25',
+  url: BASE_URL,
   headers: {
-    authorization: '0af055c9-79b9-44ba-8e1d-d9f40bb0506f',
     'Content-Type': 'application/json',
   },
 })

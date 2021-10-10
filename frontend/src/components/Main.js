@@ -12,7 +12,6 @@ function Main({
   cards,
 }) {
   const currentUser = React.useContext(CurrentUserContext)
-
   return (
     <main className='container'>
       <section className='profile page__center'>
@@ -51,7 +50,7 @@ function Main({
       <section className='elements page__center'>
         {cards.map(card => (
           <Card
-            key={card._id}
+            key={card['_id']}
             card={card}
             onCardClick={onCardClick}
             onCardLike={onCardLike}

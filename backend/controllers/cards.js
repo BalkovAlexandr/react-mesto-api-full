@@ -5,7 +5,6 @@ const ValidationError = require('../errors/ValidationError')
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .populate('owner')
     .then((cards) => {
       res.send(cards.map((card) => card))
     })
@@ -28,7 +27,7 @@ const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .orFail(new NotFoundError('Карточка по заданному id отсутствует'))
     .then((card) => {
-      if (String(card.owner._id) !== String(req.user._id)) {
+      if (String(card.owner) !== String(req.user._id)) {
         throw new ForbiddenError('Недостаточно прав')
       }
       card.remove()

@@ -9,8 +9,6 @@ const ConflictError = require('../errors/ConflictError')
 const NotFoundError = require('../errors/NotFoundError')
 const ValidationError = require('../errors/ValidationError')
 
-const saltRounds = 10
-
 const deleteEmptyField = (obj) => {
   Object.keys(obj).forEach((key) => {
     if (obj[key] === undefined) {
@@ -52,13 +50,20 @@ const getUser = (req, res, next) => {
     })
 }
 
+const currentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .orFail(new NotFoundError('Пользователь по указанному id не найден'))
+    .then((user) => res.send(user))
+    .catch(next)
+}
+
 const createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body
 
   if (!password) {
     throw new ValidationError('Введите пароль');
   }
-  bcrypt.hash(password, saltRounds)
+  bcrypt.hash(password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
     .then((user) => res.send(user.toJSON()))
     .catch((err) => {
@@ -78,8 +83,8 @@ const login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' })
-      res.cookie('token', token, { maxAge: 3600000, httpOnly: true })
-        .end()
+      res.cookie('token', token, { maxAge: 3600000 * 24 * 7 })
+        .send({ token })
     })
     .catch(next)
 }
@@ -110,13 +115,6 @@ const updateUserAvatar = (req, res, next) => {
       }
       next(err)
     })
-}
-
-const currentUser = (req, res, next) => {
-  User.findById(req.user._id)
-    .orFail(new NotFoundError('Пользователь по указанному id не найден'))
-    .then((user) => res.send(user))
-    .catch(next)
 }
 
 module.exports = {

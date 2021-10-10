@@ -1,6 +1,6 @@
 import React from 'react'
 import PopupWithForm from './PopupWithForm'
-import useFormAndValidation from '../hooks/useFormAndValidation'
+import useFormAndValidation from '../hooks/useForm'
 
 function AppPlacePopup({
   isOpen,
@@ -9,28 +9,16 @@ function AppPlacePopup({
   onOverlayClose,
   isRender,
 }) {
-  const { values, errors, isValid, handleChange, resetForm } =
-    useFormAndValidation()
-  const [name, setName] = React.useState('')
-  const [link, setLink] = React.useState('')
-
-  function handleAddName(e) {
-    setName(e.target.value)
-  }
-
-  function handleAddLink(e) {
-    setLink(e.target.value)
-  }
+  const { values, errors, isValid, handleChange, resetForm } = useFormAndValidation()
 
   function handleSubmit(e) {
     e.preventDefault()
-    onAddPlace({ name, link })
+    onAddPlace(values)
   }
 
   React.useEffect(() => {
-    setName('')
-    setLink('')
-  }, [isOpen])
+    resetForm()
+  }, [isOpen, resetForm])
 
   return (
     <PopupWithForm
@@ -39,7 +27,7 @@ function AppPlacePopup({
       btnName={isRender ? 'Сохранение...' : 'Создать'}
       isOpen={isOpen}
       onClose={onClose}
-      onAddPlace={onAddPlace}
+      isDisabled={!isValid}
       onSubmit={handleSubmit}
       onOverlayClose={onOverlayClose}
     >
@@ -52,10 +40,10 @@ function AppPlacePopup({
         minLength='2'
         maxLength='30'
         required
-        value={name}
-        onChange={handleAddName}
+        value={values.name || ''}
+        onChange={handleChange}
       />
-      <span id='card-name-input-error' className='popup__input-error'></span>
+      <span id='card-name-input-error' className='popup__input-error'>{errors.name || ''}</span>
       <input
         id='card-link-input'
         type='url'
@@ -63,10 +51,10 @@ function AppPlacePopup({
         className='popup__input popup__input_add-card_link'
         name='link'
         required
-        value={link}
-        onChange={handleAddLink}
+        value={values.link || ''}
+        onChange={handleChange} 
       />
-      <span id='card-link-input-error' className='popup__input-error'></span>
+      <span id='card-link-input-error' className='popup__input-error'>{errors.link || ''}</span>
     </PopupWithForm>
   )
 }

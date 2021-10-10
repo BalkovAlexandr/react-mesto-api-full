@@ -15,6 +15,10 @@ router.use(validateAuth, auth)
 router.use('/users', userRouter)
 router.use('/cards', cardRouter)
 
+router.get('/logout', (req, res) => {
+  res.clearCookie('token').send()
+})
+
 router.use((req, res, next) => {
   next(new NotFoundError(`Запрашиваемый ресурс по адресу '${req.path}' не найден`))
 })

@@ -15,9 +15,7 @@ const auth = (req, res, next) => {
   } catch (err) {
     next(new AuthError('Авторизация не пройдена'))
   }
-
   req.user = payload
-
   return next()
 }
 
