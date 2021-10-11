@@ -93,9 +93,7 @@ const updateUserProfile = (req, res, next) => {
   deleteEmptyField(req.body)
   User.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
     .orFail(new NotFoundError('Пользователь по заданному id отсутствует'))
-    .then((user) => {
-      res.send(user)
-    })
+    .then((user) => console.log(res.send(user)))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`))
@@ -107,13 +105,14 @@ const updateUserProfile = (req, res, next) => {
 const updateUserAvatar = (req, res, next) => {
   deleteEmptyField(req.body)
   User.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
-    .orFail(new NotFoundError('Пользователь по заданному id отсутствует'))
+    .orFail(new NotFoundError('Пользователь по указанному _id не найден'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`))
+      } else {
+        next(err)
       }
-      next(err)
     })
 }
 

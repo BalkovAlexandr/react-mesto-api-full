@@ -45,7 +45,7 @@ class Api {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
-        headers: this._token,
+        authorization: this._token,
         'Content-Type': 'application/json',
       },
       credentials: 'include',
@@ -86,13 +86,13 @@ class Api {
   }
 
   changeLikeCardStatus(cardId, isNotLiked) {
-    return fetch(`${this._url}/cards/likes/${cardId}`, {
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
       method: isNotLiked ? 'PUT' : 'DELETE',
       headers: {
         authorization: this._token,
       },
       credentials: 'include',
-    }).then(res => {
+    }).then(res => { 
       return this._getResponseData(res)
     })
   }

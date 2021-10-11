@@ -144,7 +144,7 @@ function App() {
     setRenderSave(true)
     api.setNewAvatar(avatar)
       .then(data => {
-        setCurrentUser({...currentUser, avatar: data.avatar})
+        setCurrentUser({ ...currentUser, avatar: data.avatar })
         closeAllPopups()
       })
       .catch(err => {
