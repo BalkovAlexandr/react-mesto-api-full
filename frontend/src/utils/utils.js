@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3001'
+export const BASE_URL = 'https://api.balkov.mesto.students.nomoredomains.club'
 // export const validationObject = {
 //   formSelector: '.popup__form',
 //   inputSelector: '.popup__input',
